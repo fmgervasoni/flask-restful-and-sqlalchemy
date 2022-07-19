@@ -1,4 +1,4 @@
-from flask_restx import Resource
+from flask_restful import Resource
 from models.store import StoreModel
 
 class Store(Resource):
@@ -31,4 +31,4 @@ class Store(Resource):
 
 class StoreList(Resource):
     def get(self):
-        return {"stores": [store.json() for store in StoreModel.query.all()]}
+        return {"stores": [store.json() for store in StoreModel.find_all()]}
