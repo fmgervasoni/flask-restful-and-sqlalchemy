@@ -1,4 +1,5 @@
-from db import db
+from sqlalchemy.orm.query import Query
+from utils.db import db
 
 class ItemModel(db.Model):
     __tablename__ = "items"
@@ -10,23 +11,32 @@ class ItemModel(db.Model):
     store_id = db.Column(db.Integer, db.ForeignKey("stores.id"))
     store = db.relationship("StoreModel")
 
-    def __init__(self, name, price, store_id):
+    def __init__(self, name:str, price:float, store_id:int) -> None:
         self.name = name
         self.price = price
         self.store_id = store_id
 
-    def json(self):
-        return {"name": self.name, "price": self.price}
+    def json(self) -> dict:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "store_id": self.store_id
+        }
 
     @classmethod
-    def find_by_name(cls, name:str):
+    def find_by_name(cls, item_name:str) -> Query:
         # SELECT * FROM items WHERE name=name LIMIT 1
-        return cls.query.filter_by(name=name).first()
+        return cls.query.filter_by(name=item_name).first()
 
-    def save_to_db(self):
+    @classmethod
+    def find_all(cls) -> Query:
+        return cls.query.all()
+    
+    def save_to_db(self) -> None:
         db.session.add(self)
         db.session.commit()
 
-    def delete_from_db(self):
+    def delete_from_db(self) -> None:
         db.session.delete(self)
         db.session.commit()
