@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 app.config['DEBUG'] = True
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///data.db")
-app.config["SQLALCHEMY_TRACK_NOTIFICATIONS"] = False
+# app.config["SQLALCHEMY_TRACK_NOTIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
 api = Api(app)
@@ -44,12 +44,12 @@ def add_claims_to_jwt(identity):
     return {'is_admin': False}
 
 @jwt.token_in_blocklist_loader
-def check_if_token_in_blacklist(decrypted_token):
-    return decrypted_token['jti'] in BLOCKLIST
+def check_if_token_in_blacklist(jwt_header, jwt_data):
+    return jwt_data['jti'] in BLOCKLIST
 
 # The following callbacks are used for customizing jwt response/error messages.
 @jwt.expired_token_loader
-def expired_token_callback():
+def expired_token_callback(jwt_header, jwt_data):
     return jsonify({
         'message': 'The token has expired.',
         'error': 'token_expired'
@@ -70,7 +70,7 @@ def missing_token_callback(error):
     }), 401
 
 @jwt.needs_fresh_token_loader
-def token_not_fresh_callback():
+def token_not_fresh_callback(jwt_header, jwt_data):
     return jsonify({
         "description": "The token is not fresh.",
         'error': 'fresh_token_required'
@@ -78,7 +78,7 @@ def token_not_fresh_callback():
 
 
 @jwt.revoked_token_loader
-def revoked_token_callback():
+def revoked_token_callback(jwt_header, jwt_data):
     return jsonify({
         "description": "The token has been revoked.",
         'error': 'token_revoked'

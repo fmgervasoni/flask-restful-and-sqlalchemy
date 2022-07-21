@@ -63,12 +63,11 @@ class UserLogin(Resource):
                     }, 200
         return {"message": "Invalid Credentials!"}, 401
 
-
 class UserLogout(Resource):
-    @jwt_required
+    @jwt_required(fresh=True)
     def post(self) -> tuple:
         jti = get_jwt()['jti']
-        BLACKLIST.add(jti)
+        BLOCKLIST.add(jti)
         return {"message": "Successfully logged out"}, 200
 
 

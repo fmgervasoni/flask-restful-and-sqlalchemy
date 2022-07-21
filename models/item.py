@@ -25,9 +25,9 @@ class ItemModel(db.Model):
         }
 
     @classmethod
-    def find_by_name(cls, name:str) -> Query:
+    def find_by_name(cls, item_name:str) -> Query:
         # SELECT * FROM items WHERE name=name LIMIT 1
-        return cls.query.filter_by(name=name).first()
+        return cls.query.filter_by(name=item_name).first()
 
     @classmethod
     def find_all(cls) -> Query:

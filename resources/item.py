@@ -20,7 +20,7 @@ class Item(Resource):
         help="Every item needs a store id."
     )
 
-    @jwt_required
+    @jwt_required(fresh=True)
     def get(self, name:str) -> tuple:
         item = ItemModel.find_by_name(name)
         if item:
@@ -39,7 +39,7 @@ class Item(Resource):
             return {"message": "An error occurred while inserting the item."}, 500
         return item.json(), 201
 
-    @jwt_required
+    @jwt_required(fresh=True)
     def delete(self, name:str) -> tuple:
         claims = get_jwt()
         if not claims['is_admin']:
@@ -51,8 +51,8 @@ class Item(Resource):
             return {'message': 'Item deleted.'}, 200
         return {'message': 'Item not found.'}, 404
 
-    @jwt_required
-    def put(self, name:str) -> str:
+    @jwt_required(fresh=True)
+    def put(self, name:str) -> dict:
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
         
