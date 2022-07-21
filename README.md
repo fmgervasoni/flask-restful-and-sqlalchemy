@@ -32,6 +32,8 @@ POST /register: register an user (example on body request: {"user": "pedro", "pa
 POST /login: login to the API example: (example on body request: {"user": "pedro", "password": "myp4ssw0rd"})
 POST /logout: you need to pass the JWT token on params (Bearer <token>)
 POST /refresh: refresh the session token (Bearer <token>)
+GET /user/<user_id>: get user information
+DEL /user/<user_id>: delete specific user
 
 GET /stores: get all stores
 GET /store/<name>: get specific store
