@@ -1,3 +1,4 @@
+from flask_sqlalchemy import Query
 from utils.db import db
 
 class StoreModel(db.Model):
@@ -5,13 +6,12 @@ class StoreModel(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-
     items = db.relationship("ItemModel", lazy="dynamic")
 
-    def __init__(self, name):
+    def __init__(self, name:str) -> None:
         self.name = name
 
-    def json(self):
+    def json(self) -> dict:
         return {
             "id": self.id,
             "name": self.name,
@@ -19,18 +19,18 @@ class StoreModel(db.Model):
         }
 
     @classmethod
-    def find_by_name(cls, name:str):
+    def find_by_name(cls, name:str) -> Query:
         # SELECT * FROM items WHERE name=name LIMIT 1
         return cls.query.filter_by(name=name).first()
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> Query:
         return cls.query.all()
     
-    def save_to_db(self):
+    def save_to_db(self) -> None:
         db.session.add(self)
         db.session.commit()
 
-    def delete_from_db(self):
+    def delete_from_db(self) -> None:
         db.session.delete(self)
         db.session.commit()

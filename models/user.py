@@ -1,3 +1,4 @@
+from flask_sqlalchemy import Query
 from utils.db import db
 
 class UserModel(db.Model):
@@ -11,24 +12,24 @@ class UserModel(db.Model):
         self.username = username
         self.password = password
 
-    def json(self):
+    def json(self) -> dict:
         return {
             "id": self.id,
             "username": self.username
         }
         
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-        
-    def delete_from_db(self):
-        db.session.delete(self)
-        db.session.commit()
-
     @classmethod
-    def find_by_username(cls, user_name:str) -> object:
+    def find_by_username(cls, user_name:str) -> Query:
         return cls.query.filter_by(username=user_name).first()
 
     @classmethod
-    def find_by_id(cls, _id:str) -> object:
+    def find_by_id(cls, _id:str) -> Query:
         return cls.query.filter_by(id=_id).first()
+    
+    def save_to_db(self) -> None:
+        db.session.add(self)
+        db.session.commit()
+        
+    def delete_from_db(self) -> None:
+        db.session.delete(self)
+        db.session.commit()
