@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 app.config['DEBUG'] = True
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///data.db")
-# app.config["SQLALCHEMY_TRACK_NOTIFICATIONS"] = False
+app.config["SQLALCHEMY_TRACK_NOTIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
 api = Api(app)
@@ -26,8 +26,8 @@ JWT related configuration.
 app.config['JWT_SECRET_KEY'] = os.environ.get("JWT_SECRET_KEY", "default")
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=1800)
 app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-app.config['JWT_BLACKLIST_ENABLED'] = True  # enable blacklist feature
-app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']  # allow blacklisting for access and refresh tokens
+app.config['JWT_BLACKLIST_ENABLED'] = True # deprecated, to be removed
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']  # deprecated, to be removed
 jwt = JWTManager(app)
 
 
@@ -56,7 +56,7 @@ def expired_token_callback(jwt_header, jwt_data):
     }), 401
 
 @jwt.invalid_token_loader
-def invalid_token_callback(error):  # we have to keep the argument here, since it's passed in by the caller internally
+def invalid_token_callback(error):
     return jsonify({
         'message': 'Signature verification failed.',
         'error': 'invalid_token'
