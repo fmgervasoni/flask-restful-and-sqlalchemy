@@ -5,7 +5,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 from utils.db import db
-from utils.blacklist import BLACKLIST
+from utils.blocklist import BLOCKLIST
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
@@ -37,22 +37,15 @@ and for each jwt protected endpoint, we can retrieve these claims via `get_jwt_c
 one possible use case for claims are access level control, which is shown below
 """
 
-@jwt.user_claims_loader
+@jwt.additional_claims_loader
 def add_claims_to_jwt(identity):
     if identity == 1:   # instead of hard-coding, we should read from a config file to get a list of admins instead (AD?)
         return {'is_admin': True}
     return {'is_admin': False}
 
-@jwt.auth_response_handler
-def customized_response_handler(access_token, identity):
-    return jsonify({
-                    'access_token': access_token.decode('utf-8'),
-                    'user_id': identity.id
-            })
-
-@jwt.token_in_blacklist_loader
+@jwt.token_in_blocklist_loader
 def check_if_token_in_blacklist(decrypted_token):
-    return decrypted_token['jti'] in BLACKLIST
+    return decrypted_token['jti'] in BLOCKLIST
 
 # The following callbacks are used for customizing jwt response/error messages.
 @jwt.expired_token_loader

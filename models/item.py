@@ -1,4 +1,4 @@
-from flask_sqlalchemy import Query
+from sqlalchemy.orm.query import Query
 from utils.db import db
 
 class ItemModel(db.Model):
