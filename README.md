@@ -27,22 +27,77 @@ python3 app.py
 ## Endpoints available:
 
 
+POST - Register an user (example on body request: {"user": "pedro", "password": "myp4ssw0rd"})
 ```bash
-POST /register: register an user (example on body request: {"user": "pedro", "password": "myp4ssw0rd"})
-POST /login: login to the API example: (example on body request: {"user": "pedro", "password": "myp4ssw0rd"})
-POST /logout: you need to pass the JWT token on params (Bearer <token>)
-POST /refresh: refresh the session token (Bearer <token>)
-GET /user/<user_id>: get user information
-DEL /user/<user_id>: delete specific user
+/register
+```
 
-GET /stores: get all stores
-GET /store/<name>: get specific store
-POST /store/<name>: add store
-DEL /store/<name>: delete store
+POST - Login to the API example: (example on body request: {"user": "pedro", "password": "myp4ssw0rd"})
+```bash
+/login
+```
 
-GET /items: get all items, if you logged in you will get more information
-GET /item/<name>: get specific item
-POST /item/<name>: add new item to store (example on body: {"price": 10.24, "store_id": "1"})
-PUT /item/<name>: update the item in the store (example on body: {"price": 10.24, "store_id": "1"})
-DEL /item/<name>: delete specific item
+POST - You need to pass the JWT token on params (Bearer <token>)
+```bash
+/logout
+```
+
+POST - refresh the session token (Bearer <token>)
+```bash
+/refresh
+```
+
+GET - get user information
+```bash
+/user/<user_id>
+```
+
+DEL - delete specific user
+```bash
+/user/<user_id>
+```
+
+GET - get all stores
+```bash
+/stores
+```
+
+GET - get specific store
+```bash
+/store/<name>
+```
+
+POST - add store
+```bash
+/store/<name>
+```
+
+DEL - delete store
+```bash
+/store/<name>
+```
+
+GET - get all items, if you logged in you will get more information
+```bash
+/items
+```
+
+GET - get specific item
+```bash
+/item/<name>
+```
+
+POST - add new item to store (example on body: {"price": 10.24, "store_id": "1"})
+```bash
+/item/<name>
+```
+
+PUT - update the item in the store (example on body: {"price": 10.24, "store_id": "1"})
+```bash
+/item/<name>
+```
+
+DEL - delete specific item
+```bash
+/item/<name>
 ```
